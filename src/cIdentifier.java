@@ -2,8 +2,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -13,7 +15,8 @@ import java.util.Scanner;
  * Class: Java20B
  */
 public class cIdentifier {
-
+    private Scanner sc;
+    private boolean test = false;
 
     public ArrayList<Customer> createListFromFile(String file) {
 
@@ -37,21 +40,33 @@ public class cIdentifier {
         return customerInfo;
     }
 
-    public String readInput(String prompt) {
-        Scanner sc = new Scanner(System.in);
+    public String readInput(String prompt, String testInput) {
 
+
+        if (test) {
+            sc = new Scanner(testInput);
+        } else {
+            sc = new Scanner(System.in);
+        }
 
         while (true) {
             try {
                 System.out.println(prompt);
-                String input = sc.nextLine();
 
+                return sc.nextLine();
 
-            } catch ()
+            } catch (NoSuchElementException e) {
+                System.out.println("Indata saknas");
+                sc.nextLine();
+            } catch (Exception e) {
+                System.out.println("Ospecifierat fel inträffade, försök igen!");
+                e.printStackTrace();
+                sc.nextLine();
+            }
         }
+    }
 
-
-
-
+    public void setTest(boolean test) {
+        this.test = test;
     }
 }
