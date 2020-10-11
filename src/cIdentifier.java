@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
@@ -41,8 +39,6 @@ public class cIdentifier {
     }
 
     public String readInput(String prompt, String testInput) {
-
-
         if (test) {
             sc = new Scanner(testInput);
         } else {
@@ -66,7 +62,23 @@ public class cIdentifier {
         }
     }
 
-    public void setTest(boolean test) {
-        this.test = test;
+    public String getMessage(String input, ArrayList<Customer> list) {
+        LocalDate oneYearAgo = LocalDate.now().plusMonths(-12);
+
+        for (Customer c : list) {
+            if ((c.getName().equalsIgnoreCase(input) || c.getSsNumber().equalsIgnoreCase(input)) && c.getMembership().isAfter(oneYearAgo)) {
+                return "Nuvarande medlem";
+            } else if (c.getName().equalsIgnoreCase(input) || c.getSsNumber().equalsIgnoreCase(input)) {
+                return "En före detta medlem";
+            }
+        }
+
+        return "Aldrig varit medlem";
     }
-}
+
+        public void setTest (boolean test){
+            this.test = test;
+        }
+
+
+    }

@@ -11,7 +11,7 @@ public class Main {
         cIdentifier c = new cIdentifier();
         ArrayList<Customer> customerInfo = c.createListFromFile("customers.txt");
         String input = c.readInput("Inmata namn eller personnummer", null);
-        //String message = c.getMessage(customerInfo,input);
+        //String message = c.getMessage(input,customerInfo);
         //c.printMessage(message);
 
 

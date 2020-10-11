@@ -17,6 +17,7 @@ public class cIdentifierTest {
 
     //Exception
     //error
+    //printMessage
 
     @Test
     public final void createListFromFileTest() {
@@ -33,6 +34,35 @@ public class cIdentifierTest {
         assertNotEquals("8104021234", c.readInput("Inmata namn eller personnummer", "10"));
 
     }
+
+    @Test
+    public final void getMessageTest() {
+        c.setTest(true);
+        ArrayList<Customer> customerInfo = c.createListFromFile("customers.txt");
+        String input = "Egg";
+        assertEquals("Aldrig varit medlem",c.getMessage(input,customerInfo));
+
+        input = "Alhambra Aromes";
+        assertEquals("En före detta medlem",c.getMessage(input,customerInfo));
+
+        input = "8104021234";
+        assertEquals("En före detta medlem",c.getMessage(input,customerInfo));
+
+
+        input = c.readInput("Inmata namn eller personnummer", "Mitsuko Mayotte");
+        assertEquals("En före detta medlem",c.getMessage(input,customerInfo));
+
+        input = "7512166544";
+        assertEquals("Nuvarande medlem",c.getMessage(input,customerInfo));
+
+        input = "Ida Idylle";
+        assertNotEquals("Nuvarande medlem",c.getMessage(input,customerInfo));
+
+        input = "Ida Idylle";
+        assertNotEquals("Aldrig varit medlem",c.getMessage(input,customerInfo));
+    }
+
+
 
 
 
