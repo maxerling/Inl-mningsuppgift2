@@ -13,7 +13,7 @@ public class Customer {
 
     public Customer(String name, String ssNumber, LocalDate membership) {
         this.name = name;
-        this.ssNumber =  ssNumber;
+        this.ssNumber = ssNumber;
         this.membership = membership;
     }
 
@@ -28,5 +28,10 @@ public class Customer {
 
     public String getSsNumber() {
         return ssNumber;
+    }
+
+
+    public String toString() {
+        return this.name + ',' + this.ssNumber;
     }
 }

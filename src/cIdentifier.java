@@ -1,9 +1,6 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -12,17 +9,17 @@ import java.util.Scanner;
  * Copyright: MIT
  * Class: Java20B
  */
+
+
 public class cIdentifier {
-    private Scanner sc;
     private boolean test = false;
 
-    public ArrayList<Customer> createListFromFile(String file) {
-
+    public ArrayList<Customer> createListFromFile() {
+        String file = "customers.txt";
         String row = null;
         String row2 = null;
         ArrayList<Customer> customerInfo = new ArrayList<>();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             while ((row = reader.readLine()) != null && (row2 = reader.readLine()) != null) {
                 String[] info = row.split(",");
                 String ssn = info[0];
@@ -31,29 +28,43 @@ public class cIdentifier {
                 Customer customer = new Customer(name, ssn, date);
                 customerInfo.add(customer);
             }
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
+            System.out.println("Fil går ej att hitta");
             e.printStackTrace();
-            System.out.println("Fil ej hittad!");
+        } catch (IOException e) {
+            System.out.println("Fil går ej att läsa");
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Ospecifierat fel har uppstått");
+            e.printStackTrace();
         }
+
         return customerInfo;
     }
 
     public String readInput(String prompt, String testInput) {
+        Scanner sc;
         if (test) {
             sc = new Scanner(testInput);
         } else {
             sc = new Scanner(System.in);
         }
 
+
         while (true) {
             try {
                 System.out.println(prompt);
+                String input = sc.nextLine();
 
-                return sc.nextLine();
 
-            } catch (NoSuchElementException e) {
-                System.out.println("Indata saknas");
-                sc.nextLine();
+                if (input.isEmpty()) {
+                    System.out.println("Tom inmatning, försök igen!");
+
+                } else {
+                    return input;
+                }
+
+
             } catch (Exception e) {
                 System.out.println("Ospecifierat fel inträffade, försök igen!");
                 e.printStackTrace();
@@ -63,7 +74,7 @@ public class cIdentifier {
     }
 
     public String getMessage(String input, ArrayList<Customer> list) {
-        LocalDate oneYearAgo = LocalDate.now().plusMonths(-12);
+        LocalDate oneYearAgo = LocalDate.now().minusMonths(12);
 
         for (Customer c : list) {
             if ((c.getName().equalsIgnoreCase(input) || c.getSsNumber().equalsIgnoreCase(input)) && c.getMembership().isAfter(oneYearAgo)) {
@@ -76,9 +87,33 @@ public class cIdentifier {
         return "Aldrig varit medlem";
     }
 
-        public void setTest (boolean test){
-            this.test = test;
+    public void addToPTFile(String message, String input, ArrayList<Customer> list) {
+        if (message.equalsIgnoreCase("Nuvarande medlem")) {
+            for (Customer c : list) {
+                if (input.equals(c.getName()) || input.equals(c.getSsNumber())) {
+                    try {
+
+                        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("PTFile.txt", true)));
+                        out.println(c.toString() + '\n' + LocalDate.now());
+                        out.close();
+
+                    } catch (IOException e) {
+                        System.out.println("Fel uppstod vid skrivande till fil");
+                    } catch (Exception e) {
+                        System.out.println("Ospecifierat fel har uppstått");
+                    }
+
+                }
+            }
+
+
         }
 
-
     }
+
+    public void setTest(boolean test) {
+        this.test = test;
+    }
+
+
+}
